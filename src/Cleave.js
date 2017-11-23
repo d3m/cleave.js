@@ -31,7 +31,7 @@ Cleave.prototype = {
         var owner = this, pps = owner.properties;
 
         // no need to use this lib
-        if (!pps.numeral && !pps.phone && !pps.creditCard && !pps.date && (pps.blocksLength === 0 && !pps.prefix)) {
+        if (!pps.numeral && !pps.phone && !pps.creditCard && !pps.date && !pps.time && (pps.blocksLength === 0 && !pps.prefix)) {
             owner.onInput(pps.initValue);
 
             return;
@@ -55,6 +55,7 @@ Cleave.prototype = {
 
         owner.initPhoneFormatter();
         owner.initDateFormatter();
+        owner.initTimeFormatter();
         owner.initNumeralFormatter();
 
         owner.onInput(pps.initValue);
@@ -87,6 +88,19 @@ Cleave.prototype = {
 
         pps.dateFormatter = new Cleave.DateFormatter(pps.datePattern);
         pps.blocks = pps.dateFormatter.getBlocks();
+        pps.blocksLength = pps.blocks.length;
+        pps.maxLength = Cleave.Util.getMaxLength(pps.blocks);
+    },
+    
+    initTimeFormatter: function () {
+        var owner = this, pps = owner.properties;
+
+        if (!pps.time) {
+            return;
+        }
+
+        pps.timeFormatter = new Cleave.TimeFormatter(pps.timePattern);
+        pps.blocks = pps.timeFormatter.getBlocks();
         pps.blocksLength = pps.blocks.length;
         pps.maxLength = Cleave.Util.getMaxLength(pps.blocks);
     },
@@ -211,6 +225,11 @@ Cleave.prototype = {
         // date
         if (pps.date) {
             value = pps.dateFormatter.getValidatedDate(value);
+        }
+        
+        // time
+        if (pps.time) {
+            value = pps.timeFormatter.getValidatedTime(value);
         }
 
         // strip delimiters
@@ -383,6 +402,7 @@ Cleave.prototype = {
 
 Cleave.NumeralFormatter = require('./shortcuts/NumeralFormatter');
 Cleave.DateFormatter = require('./shortcuts/DateFormatter');
+Cleave.TimeFormatter = require('./shortcuts/TimeFormatter');
 Cleave.PhoneFormatter = require('./shortcuts/PhoneFormatter');
 Cleave.CreditCardDetector = require('./shortcuts/CreditCardDetector');
 Cleave.Util = require('./utils/Util');

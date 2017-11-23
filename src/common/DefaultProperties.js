@@ -27,6 +27,11 @@ var DefaultProperties = {
         target.date = !!opts.date;
         target.datePattern = opts.datePattern || ['d', 'm', 'Y'];
         target.dateFormatter = {};
+        
+        // time
+        target.time = !!opts.time;
+        target.timePattern = opts.timePattern || ['H', 'M', 'S'];
+        target.timeFormatter = {};
 
         // numeral
         target.numeral = !!opts.numeral;
@@ -54,9 +59,10 @@ var DefaultProperties = {
         target.delimiter =
             (opts.delimiter || opts.delimiter === '') ? opts.delimiter :
                 (opts.date ? '/' :
-                    (opts.numeral ? ',' :
-                        (opts.phone ? ' ' :
-                            ' ')));
+                    (opts.time ? ':' :
+                        (opts.numeral ? ',' :
+                            (opts.phone ? ' ' :
+                                ' '))));
         target.delimiterLength = target.delimiter.length;
         target.delimiters = opts.delimiters || [];
 
